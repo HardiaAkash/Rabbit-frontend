@@ -45,23 +45,26 @@ const cards = [
 ];
 
 const WhyChoose = () => {
+  const baseurl = import.meta.env.VITE_API_BASE_URL;
+  console.log(baseurl);
+  
   const formik = useFormik({
     initialValues: {
       customerName: "",
       originCountry: "",
       weight: "",
       destinationCountry: "",
-      phoneNumber: "",
+      phone: "",
       email: "",
     },
     onSubmit: async (values) => {
       try {
-        const response = await axios.post("/api/enquiry", {
+        const response = await axios.post(`${baseurl}/enquiry`, {
           customerName: values.customerName,
           originCountry: values.originCountry,
           weight: values.weight,
           destinationCountry: values.destinationCountry,
-          phoneNumber: values.phoneNumber,
+          phone: values.phone,
           email: values.email,
         });
         formik.resetForm();
@@ -121,6 +124,7 @@ const WhyChoose = () => {
                   type="text"
                   name="customerName"
                   onChange={formik.handleChange}
+                  required
                   value={formik.values.customerName}
                 />
               </div>
@@ -133,8 +137,10 @@ const WhyChoose = () => {
                   id="originCountry"
                   onChange={formik.handleChange}
                   value={formik.values.originCountry}
+                  required
                   className="w-full border border-[#1111111A] rounded-lg focus-visible:outline-none pl-3 h-[44px] focus-visible:border-black mt-1.5"
                 >
+                <option value="">Select Origin Country</option>
                   <option value="india">India</option>
                 </select>
               </div>
@@ -149,8 +155,10 @@ const WhyChoose = () => {
                   id="weight"
                   onChange={formik.handleChange}
                   value={formik.values.weight}
+                  required
                   className="w-full border border-[#1111111A] rounded-lg focus-visible:outline-none pl-3 h-[44px] focus-visible:border-black mt-1.5"
                 >
+                <option value="">Select Weight</option>
                   <option value="1">1 kg</option>
                   <option value="2">2 kg</option>
                   <option value="3">3 kg</option>
@@ -168,8 +176,10 @@ const WhyChoose = () => {
                   id="destinationCountry"
                   onChange={formik.handleChange}
                   value={formik.values.destinationCountry}
+                  required
                   className="w-full border border-[#1111111A] rounded-lg focus-visible:outline-none pl-3 h-[44px] focus-visible:border-black mt-1.5"
                 >
+                 <option value="">Select Destination Country</option>
                   <option value="australia">Australia</option>
                   <option value="canada">Canada</option>
                   <option value="europe">Europe</option>
@@ -183,13 +193,14 @@ const WhyChoose = () => {
             </div>
             <div className="flex flex-col lg:flex-row w-full gap-6 lg:gap-[30px]">
               <div className="w-full">
-                <label htmlFor="phoneNumber">Phone Number*</label>
+                <label htmlFor="phone">Phone Number*</label>
                 <input
                   className="w-full border border-[#1111111A] rounded-lg focus-visible:outline-none pl-3 h-[44px] focus-visible:border-black mt-1.5"
                   type="tel"
                   onChange={formik.handleChange}
-                  value={formik.values.phoneNumber}
-                  name="phoneNumber"
+                  value={formik.values.phone}
+                  required
+                  name="phone"
                 />
               </div>
               <div className="w-full">
@@ -199,6 +210,7 @@ const WhyChoose = () => {
                   type="email"
                   onChange={formik.handleChange}
                   value={formik.values.email}
+                  required
                   name="email"
                 />
               </div>
@@ -210,6 +222,7 @@ const WhyChoose = () => {
                 type="text"
                 onChange={formik.handleChange}
                 value={formik.values.message}
+                required
                 name="message"
               />
             </div>

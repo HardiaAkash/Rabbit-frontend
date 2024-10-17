@@ -7,7 +7,6 @@ export default defineConfig({
   plugins: [
     react(),
     svgr({
-      // svgr options: https://react-svgr.com/docs/options/
       svgrOptions: {
         exportType: "default",
         ref: true,
@@ -17,4 +16,7 @@ export default defineConfig({
       include: "**/*.svg",
     }),
   ],
+  server: {
+    https: false, // Ensure that the server runs on HTTP
+  },
 });
