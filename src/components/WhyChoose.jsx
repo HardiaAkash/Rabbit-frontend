@@ -56,7 +56,7 @@ const WhyChoose = () => {
     },
     onSubmit: async (values) => {
       try {
-        const response = await axios.post("http://3.146.187.174/api/enquiry", {
+        const response = await axios.post("/api/enquiry", {
           customerName: values.customerName,
           originCountry: values.originCountry,
           weight: values.weight,
