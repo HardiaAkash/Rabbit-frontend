@@ -650,7 +650,7 @@ const Shipping = () => {
           )}
         </div>
         <p className="text-[#AF1E22] text-base font-normal mt-5">
-          Disclaimer: Rabbitspeed provides shipping services worldwide
+          Disclaimer: Rabbit Speed provides shipping services worldwide
           originating from India.
         </p>
       </div>
