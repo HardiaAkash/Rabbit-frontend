@@ -7,36 +7,39 @@ import {
 } from "react-icons/fa";
 import { useFormik } from "formik";
 import axios from "axios";
-
+import { useState } from "react";
 
 const ContactUs = () => {
   const baseurl = import.meta.env.VITE_API_BASE_URL;
-  console.log(baseurl);
-    const formik = useFormik({
-      initialValues: {
-        fullName: "",
-        contact: "",
-        email: "",
-        message: "",
-      },
-      onSubmit: async (values) => {
-        try {
-          const response = await axios.post(`${baseurl}/enquiry/contact`, {
-            fullName: values.fullName,
-            contact: values.contact,
-            email: values.email,
-            message: values.message,
-          });
-          formik.resetForm();
-          console.log("Response data:", response.data);
-        } catch (err) {
-          console.log("Error in Contact Form Submission", err);
-          formik.resetForm();
-        }
-      },
-    });
-  
-  
+  const [responseMessage, setResponseMessage] = useState(""); 
+  const [isLoading, setIsLoading] = useState(false); 
+
+  const formik = useFormik({
+    initialValues: {
+      fullName: "",
+      contact: "",
+      email: "",
+      message: "",
+    },
+    onSubmit: async (values) => {
+      setIsLoading(true); 
+      try {
+        const response = await axios.post(`${baseurl}/enquiry/contact`, {
+          fullName: values.fullName,
+          contact: values.contact,
+          email: values.email,
+          message: values.message,
+        });
+        formik.resetForm();
+        setResponseMessage(response.data.message || "Enquiry sent successfully!"); // Show success message from response
+      } catch (err) {
+        setResponseMessage("There was an error submitting your enquiry. Please try again.");
+        console.log("Error in Contact Form Submission", err);
+      }
+      setIsLoading(false); 
+    },
+  });
+
   return (
     <div className="bg-[#e7ecff] p-4">
       <div className="w-full max-w-[1200px] mx-auto rounded-[23px] overflow-hidden">
@@ -97,74 +100,78 @@ const ContactUs = () => {
             </div>
           </div>
 
+          <form onSubmit={formik.handleSubmit} className="bg-white w-full lg:w-[65%] lg:px-[40px] pt-[40px] mt-8 lg:mt-0 px-5 pb-5 lg:pb-8">
+            <div>
+              <div className="w-full">
+                <label htmlFor="fullName" className="block font-medium">
+                  Full Name
+                </label>
+                <input
+                  className="w-full border border-[#1111111A] rounded-lg focus-visible:outline-none pl-3 h-[44px] focus-visible:border-black mt-1.5"
+                  type="text"
+                  name="fullName"
+                  value={formik.values.fullName}
+                  onChange={formik.handleChange}
+                  required
+                />
+              </div>
 
+              <div className="w-full flex flex-col lg:flex-row gap-4 lg:gap-[20px] mt-[24px] lg:mt-[32px]">
+                <div className="w-full">
+                  <label htmlFor="contact" className="block font-medium">
+                    Phone Number*
+                  </label>
+                  <input
+                    className="w-full border border-[#1111111A] rounded-lg focus-visible:outline-none pl-3 h-[44px] focus-visible:border-black mt-1.5"
+                    type="text"
+                    name="contact"
+                    value={formik.values.contact}
+                    onChange={formik.handleChange}
+                    required
+                  />
+                </div>
+                <div className="w-full">
+                  <label htmlFor="email" className="block font-medium">
+                    Email
+                  </label>
+                  <input
+                    className="w-full border border-[#1111111A] rounded-lg focus-visible:outline-none pl-3 h-[44px] focus-visible:border-black mt-1.5"
+                    type="email"
+                    name="email"
+                    value={formik.values.email}
+                    onChange={formik.handleChange}
+                  />
+                </div>
+              </div>
 
-          <form onSubmit={formik.handleSubmit}  className="bg-white w-full lg:w-[65%] lg:px-[40px] pt-[40px] mt-8 lg:mt-0 px-5 pb-5 lg:pb-8">
-      <div>
-        <div className="w-full">
-          <label htmlFor="fullName" className="block font-medium">
-            Full Name
-          </label>
-          <input
-            className="w-full border border-[#1111111A] rounded-lg focus-visible:outline-none pl-3 h-[44px] focus-visible:border-black mt-1.5"
-            type="text"
-            name="fullName"
-            value={formik.values.fullName}
-            onChange={formik.handleChange}
-          />
-        </div>
+              <div className="w-full mt-[24px] lg:mt-[32px]">
+                <label htmlFor="message" className="block font-medium">
+                  Message
+                </label>
+                <textarea
+                  className="w-full border border-[#1111111A] rounded-lg focus-visible:outline-none pl-3 pt-2 focus-visible:border-black mt-1.5"
+                  name="message"
+                  rows="5"
+                  value={formik.values.message}
+                  onChange={formik.handleChange}
+                />
+              </div>
+              {responseMessage && (
+            <p className="text-black-500 text-left mt-4">{responseMessage}</p>
+          )}
+              <button
+                type="submit"
+                className="bg-[#AF1E22] py-4 px-8 w-full lg:w-fit text-white rounded-full mt-[24px] lg:mt-[32px]"
+                disabled={isLoading} 
+              >
+                {isLoading ? "Submitting..." : "Submit"} {/* Loader text */}
+              </button>
+            </div>
+           
+          </form>
 
-        <div className="w-full flex flex-col lg:flex-row gap-4 lg:gap-[20px] mt-[24px] lg:mt-[32px]">
-          <div className="w-full">
-            <label htmlFor="contact" className="block font-medium">
-              Phone Number*
-            </label>
-            <input
-              className="w-full border border-[#1111111A] rounded-lg focus-visible:outline-none pl-3 h-[44px] focus-visible:border-black mt-1.5"
-              type="text"
-              name="contact"
-              value={formik.values.contact}
-              onChange={formik.handleChange}
-            />
-          </div>
-          <div className="w-full">
-            <label htmlFor="email" className="block font-medium">
-              Email
-            </label>
-            <input
-              className="w-full border border-[#1111111A] rounded-lg focus-visible:outline-none pl-3 h-[44px] focus-visible:border-black mt-1.5"
-              type="email"
-              name="email"
-              value={formik.values.email}
-              onChange={formik.handleChange}
-            />
-          </div>
-        </div>
-
-        <div className="w-full mt-[24px] lg:mt-[32px]">
-          <label htmlFor="message" className="block font-medium">
-            Message
-          </label>
-          <textarea
-            className="w-full border border-[#1111111A] rounded-lg focus-visible:outline-none pl-3 pt-2 focus-visible:border-black mt-1.5"
-            name="message"
-            rows="5"
-            value={formik.values.message}
-            onChange={formik.handleChange}
-          />
-        </div>
-
-        <button
-          type="submit"
-          className="bg-[#AF1E22] py-4 px-8 w-full lg:w-fit text-white rounded-full mt-[24px] lg:mt-[32px]"
-        >
-          Submit
-        </button>
-      </div>
-    </form>
-
-
-          
+       
+        
         </div>
       </div>
     </div>

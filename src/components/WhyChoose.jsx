@@ -1,3 +1,4 @@
+import { useState } from "react";
 import DoorToDoor from "../assets/logo/door-to-door.svg";
 import TravelFriendly from "../assets/logo/travel.svg";
 import SimpleDocument from "../assets/logo/simple-document.svg";
@@ -46,8 +47,9 @@ const cards = [
 
 const WhyChoose = () => {
   const baseurl = import.meta.env.VITE_API_BASE_URL;
-  console.log(baseurl);
-  
+  const [responseMessage, setResponseMessage] = useState(""); 
+  const [isLoading, setIsLoading] = useState(false); 
+
   const formik = useFormik({
     initialValues: {
       customerName: "",
@@ -56,8 +58,10 @@ const WhyChoose = () => {
       destinationCountry: "",
       phone: "",
       email: "",
+      message: "", // Added message field
     },
     onSubmit: async (values) => {
+      setIsLoading(true); 
       try {
         const response = await axios.post(`${baseurl}/enquiry`, {
           customerName: values.customerName,
@@ -66,15 +70,18 @@ const WhyChoose = () => {
           destinationCountry: values.destinationCountry,
           phone: values.phone,
           email: values.email,
+          message: values.message,
         });
         formik.resetForm();
-        console.log(response.data);
+        setResponseMessage(response.data.message); 
       } catch (err) {
-        console.log("err in Shipping Calculation", err);
-        formik.resetForm();
+        setResponseMessage("There was an error submitting your enquiry. Please try again.");
+        console.log("Error in Shipping Calculation", err);
       }
+      setIsLoading(false); 
     },
   });
+
   return (
     <div className="px-4 sm:px-8 lg:px-[120px] mt-16 lg:mt-[160px]" id="choose">
       <p className="text-3xl lg:text-[40px] font-bold text-[#AF1E22] text-center">
@@ -109,6 +116,7 @@ const WhyChoose = () => {
             })}
           </div>
         </div>
+
         <form
           className="bg-white w-full mt-10 lg:mt-0 pt-6 lg:pt-[35px] px-4 sm:px-8 lg:px-[40px] text-[#100E3F] rounded-2xl h-fit pb-6 lg:pb-[40px]"
           id="enquire"
@@ -129,7 +137,7 @@ const WhyChoose = () => {
                 />
               </div>
               <div className="w-full">
-                <label htmlFor="country " className="block">
+                <label htmlFor="originCountry" className="block">
                   Origin Country*
                 </label>
                 <select
@@ -140,15 +148,16 @@ const WhyChoose = () => {
                   required
                   className="w-full border border-[#1111111A] rounded-lg focus-visible:outline-none pl-3 h-[44px] focus-visible:border-black mt-1.5"
                 >
-                <option value="">Select Origin Country</option>
+                  <option value="">Select Origin Country</option>
                   <option value="india">India</option>
                 </select>
               </div>
             </div>
+
             <div className="flex flex-col lg:flex-row w-full gap-6 lg:gap-[30px]">
               <div className="w-full">
-                <label htmlFor="weight " className="block">
-                  Approx Weight
+                <label htmlFor="weight" className="block">
+                  Approx Weight*
                 </label>
                 <select
                   name="weight"
@@ -158,7 +167,7 @@ const WhyChoose = () => {
                   required
                   className="w-full border border-[#1111111A] rounded-lg focus-visible:outline-none pl-3 h-[44px] focus-visible:border-black mt-1.5"
                 >
-                <option value="">Select Weight</option>
+                  <option value="">Select Weight</option>
                   <option value="1">1 kg</option>
                   <option value="2">2 kg</option>
                   <option value="3">3 kg</option>
@@ -179,7 +188,7 @@ const WhyChoose = () => {
                   required
                   className="w-full border border-[#1111111A] rounded-lg focus-visible:outline-none pl-3 h-[44px] focus-visible:border-black mt-1.5"
                 >
-                 <option value="">Select Destination Country</option>
+                  <option value="">Select Destination Country</option>
                   <option value="australia">Australia</option>
                   <option value="canada">Canada</option>
                   <option value="europe">Europe</option>
@@ -191,6 +200,7 @@ const WhyChoose = () => {
                 </select>
               </div>
             </div>
+
             <div className="flex flex-col lg:flex-row w-full gap-6 lg:gap-[30px]">
               <div className="w-full">
                 <label htmlFor="phone">Phone Number*</label>
@@ -215,22 +225,35 @@ const WhyChoose = () => {
                 />
               </div>
             </div>
-            <div className="w-full">
-              <label htmlFor="email">Message</label>
-              <textarea
-                className="pt-1 w-full border border-[#1111111A] rounded-lg focus-visible:outline-none pl-3 h-[150px] focus-visible:border-black mt-1.5"
-                type="text"
-                onChange={formik.handleChange}
-                value={formik.values.message}
-                required
-                name="message"
-              />
+
+            <div className="flex flex-col w-full gap-6 lg:gap-[30px]">
+              <div className="w-full">
+                <label htmlFor="message">Message</label>
+                <textarea
+                  className="w-full border border-[#1111111A] rounded-lg focus-visible:outline-none pl-3 pt-2 h-[120px] focus-visible:border-black mt-1.5"
+                  onChange={formik.handleChange}
+                  value={formik.values.message}
+                  name="message"
+                  placeholder="Optional message"
+                />
+              </div>
             </div>
           </div>
-          <button className="w-fit px-[32px] py-[16px] rounded-full bg-[#AF1E22] text-white mt-[30px] lg:mt-[100px] float-right">
-            Get Enquiry
+
+          <button
+            className="w-fit px-[32px] py-[16px] rounded-full bg-[#AF1E22] text-white mt-[30px] lg:mt-[100px] float-right"
+            type="submit"
+            disabled={isLoading} 
+          >
+            {isLoading ? "Submitting..." : "Get Enquiry"} {/* Loader text */}
           </button>
+          
+        {responseMessage && (
+          <p className="text-black-500 text-start mt-4">{responseMessage}</p>
+        )}
         </form>
+
+     
       </div>
     </div>
   );
