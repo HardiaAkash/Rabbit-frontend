@@ -1,6 +1,6 @@
 import Navbar from "./Navbar";
 
-import map from "../assets/image/map-rabbit.gif";
+import map from "../assets/image/rabbitone.gif";
 
 const FirstSection = () => {
   return (
