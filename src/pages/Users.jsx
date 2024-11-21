@@ -46,7 +46,7 @@ function Users() {
           </Link>
         );
       })}
-      {error && "Something went wrong"}
+      {error && "Something went wrong!"}
     </div>
   );
 }
