@@ -575,7 +575,8 @@ const Shipping = () => {
               <label htmlFor="weight">Weight (KG):</label>
               <input
                 className="w-full border border-[#1111111A] rounded-lg focus-visible:outline-none pl-3 h-[44px] focus-visible:border-black mt-1.5"
-                type="text"
+                type="number"
+                step="any"
                 name="weight"
                 onChange={formik.handleChange}
                 value={formik.values.weight}

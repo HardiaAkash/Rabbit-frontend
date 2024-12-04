@@ -123,8 +123,9 @@ const ContactUs = () => {
                   </label>
                   <input
                     className="w-full border border-[#1111111A] rounded-lg focus-visible:outline-none pl-3 h-[44px] focus-visible:border-black mt-1.5"
-                    type="text"
-                    name="contact"
+                    type="number"
+                     step="any"
+                    name="contact"  
                     value={formik.values.contact}
                     onChange={formik.handleChange}
                     required

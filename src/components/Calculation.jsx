@@ -70,7 +70,7 @@ const Calculation = () => {
   const formik = useFormik({
     initialValues: {
       fromCountry: "AUD",
-      toCountry: "AUD",
+      toCountry: "INR",
       amount: "",
     },
     onSubmit: async (values) => {
@@ -106,7 +106,7 @@ const Calculation = () => {
       >
         <div className="bg-white w-full px-4 sm:px-8 lg:px-[40px] pt-[20px] lg:pt-[40px] rounded-2xl pb-[40px] lg:pb-[123px]">
           <p className="text-[24px] lg:text-[30px] text-[#100E3F] font-bold">
-            Currency Converter
+            Currency Converter 
           </p>
           <form onSubmit={formik.handleSubmit}>
             <div className="pt-[20px] lg:pt-[30px]">
@@ -114,7 +114,8 @@ const Calculation = () => {
               <div className="flex border border-[#1111111A] py-1 rounded-md px-4">
                 <input
                   className="focus-visible:outline-none w-full"
-                  type="text"
+                  type="number"
+                   step="any"
                   onChange={formik.handleChange}
                   value={formik.values.amount}
                   placeholder="Enter amount"
@@ -146,7 +147,8 @@ const Calculation = () => {
               <div className="flex border border-[#1111111A] py-1 rounded-md px-2">
                 <input
                   className="focus-visible:outline-none w-full"
-                  type="text"
+                  type="number"
+                  step="any"
                   value={data && data.totalAmount}
                   disabled
                   placeholder="Value"
@@ -163,7 +165,7 @@ const Calculation = () => {
                       <option
                         value={currency.code}
                         key={index}
-                        defaultValue="AUD"
+                        defaultValue="INR"
                       >
                         {currency.country}
                       </option>
