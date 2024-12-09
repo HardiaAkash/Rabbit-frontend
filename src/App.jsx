@@ -1,28 +1,32 @@
 import { BrowserRouter as Router, Route, Routes } from "react-router-dom";
-import Login from "./pages/Login";
-import Home from "./pages/Home";
-import Register from "./pages/Register";
-import Dashboard from "./pages/Dashboard";
+import { Suspense, lazy } from "react";
 import Navbar from "./components/Navbar";
-import Edit from "./pages/Edit";
-import User from "./pages/User";
-import Notfound from "./pages/Notfound";
-import Users from "./pages/Users";
+
+// Lazy load pages
+const Login = lazy(() => import("./pages/Login"));
+const Home = lazy(() => import("./pages/Home"));
+const Register = lazy(() => import("./pages/Register"));
+const Dashboard = lazy(() => import("./pages/Dashboard"));
+const Edit = lazy(() => import("./pages/Edit"));
+const User = lazy(() => import("./pages/User"));
+const Notfound = lazy(() => import("./pages/Notfound"));
+const Users = lazy(() => import("./pages/Users"));
 
 function App() {
   return (
     <Router>
-      <Routes>
-        <Route index element={<Home />} />
-        <Route path="/login" element={<Login />} />
-        <Route path="/register" element={<Register />} />
-        <Route path="/profile" element={<Dashboard />} />
-        <Route path="/profile/edit" element={<Edit />} />
-        <Route path="/users" element={<Users />} />
-        <Route path="/users/:username" element={<User />} />
-        {/* <Route path="/404" element={<Notfound />} /> */}
-        <Route path="*" element={<Notfound />} />
-      </Routes>
+      <Suspense fallback={<div>Loading...</div>}>
+        <Routes>
+          <Route index element={<Home />} />
+          <Route path="/login" element={<Login />} />
+          <Route path="/register" element={<Register />} />
+          <Route path="/profile" element={<Dashboard />} />
+          <Route path="/profile/edit" element={<Edit />} />
+          <Route path="/users" element={<Users />} />
+          <Route path="/users/:username" element={<User />} />
+          <Route path="*" element={<Notfound />} />
+        </Routes>
+      </Suspense>
     </Router>
   );
 }

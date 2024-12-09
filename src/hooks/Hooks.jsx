@@ -27,7 +27,3 @@ export const useAlert = () => {
     dispatchAlert,
   };
 };
-
-export default function Hook() {
-  return;
-}

@@ -5,7 +5,6 @@ import "./index.css";
 import UserProvider from "./context/UserContext";
 import AlertProvider from "./context/AlertContext";
 import Alert from "./components/Alert";
-import Hooks from "./hooks/Hooks";
 import Loader from "./components/Loader";
 
 ReactDOM.createRoot(document.getElementById("root")).render(
@@ -15,7 +14,6 @@ ReactDOM.createRoot(document.getElementById("root")).render(
         <App />
         <Loader />
         <Alert />
-        <Hooks />
       </UserProvider>
     </AlertProvider>
   </React.StrictMode>
